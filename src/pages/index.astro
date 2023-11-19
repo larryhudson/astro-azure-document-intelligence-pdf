@@ -1,0 +1,33 @@
+---
+import { handlePdf } from "@src/pdf";
+import { Debug } from "astro:components";
+let data;
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const file = formData.get("file");
+  data = await handlePdf(file);
+}
+
+const content = data?.content;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <h1>Astro</h1>
+    <h2>Upload a PDF</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" />
+
+      <button>Upload</button>
+    </form>
+    <Debug {data} />
+    <pre>{content}</pre>
+  </body>
+</html>
